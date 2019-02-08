@@ -5,32 +5,27 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import no.acntech.spring.cache.demo.domain.User;
 
-import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
-
 @Service
 public class UserService {
 
-    private CacheManager cacheManager;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    public UserService(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
+    private final Cache usersCache;
+
+    public UserService(Cache usersCache) {
+        this.usersCache = usersCache;
     }
 
     public List<User> getUsers(List<String> namesForSlowService, List<String> namesForSuperSlowService) {
         List<User> users = new ArrayList<>();
 
-        Cache usersCache = cacheManager.getCache(USERS_CACHE);
-        ArrayList cachedUsersFromSlowService = usersCache.get(namesForSlowService, ArrayList.class);
-        ArrayList cachedUsersFromSuperSlowService = usersCache.get(namesForSuperSlowService, ArrayList.class);
+        List<User> cachedUsersFromSlowService = usersCache.get(namesForSlowService, List.class);
+        List<User> cachedUsersFromSuperSlowService = usersCache.get(namesForSuperSlowService, List.class);
 
         if (cachedUsersFromSlowService != null) {
             users.addAll(cachedUsersFromSlowService);

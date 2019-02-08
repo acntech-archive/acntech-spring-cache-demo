@@ -1,5 +1,7 @@
 package no.acntech.spring.cache.demo;
 
+import javax.annotation.PostConstruct;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,30 +9,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import no.acntech.spring.cache.demo.domain.User;
 import no.acntech.spring.cache.demo.integration.SlowExternalUserService;
 import no.acntech.spring.cache.demo.integration.SuperSlowExternalUserService;
+import no.acntech.spring.cache.demo.service.UserService;
 
 @Configuration
 @EnableScheduling
 public class ScheduledCacheTask {
 
+    private TaskExecutor taskExecutor;
     private SlowExternalUserService slowExternalUserService;
     private SuperSlowExternalUserService superSlowExternalUserService;
     private static final Logger logger = LoggerFactory.getLogger(ScheduledCacheTask.class);
 
     @Autowired
-    public ScheduledCacheTask(SlowExternalUserService slowExternalUserService,
+    public ScheduledCacheTask(TaskExecutor applicationTaskExecutor,
+                              SlowExternalUserService slowExternalUserService,
                               SuperSlowExternalUserService superSlowExternalUserService) {
+        this.taskExecutor = applicationTaskExecutor;
         this.slowExternalUserService = slowExternalUserService;
         this.superSlowExternalUserService = superSlowExternalUserService;
     }
 
     @Scheduled(fixedDelayString = "${scheduling.cachetask.fixedDelay.inMillis}")
     public void scheduleRefreshCache() {
+        refreshCaches();
+    }
+
+    /**
+     * Pre-warm caches on startup
+     */
+    @PostConstruct
+    public void postConstruct() {
+        taskExecutor.execute(this::refreshCaches);
+    }
+
+    private void refreshCaches() {
         logger.info("Starting refreshing the cache");
 
         List<String> namesForSlowService = Arrays.asList("Tom", "Jon", "Peter");
