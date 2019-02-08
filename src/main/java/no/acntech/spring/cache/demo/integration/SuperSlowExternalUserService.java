@@ -5,25 +5,38 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import no.acntech.spring.cache.demo.domain.User;
 
+import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
+
 @Service
 public class SuperSlowExternalUserService {
 
-    private final long SLEEP_IN_SECONDS = 6;
+    private final long SLEEP_IN_SECONDS = 20;
+    private static final Logger logger = LoggerFactory.getLogger(SuperSlowExternalUserService.class);
 
-    public List<User> getUsers(List<String> names) {
+    @CachePut(value = USERS_CACHE)
+    public List<User> getUsers(List<String> namesForSuperSlowService) {
+        logger.info("Calling Super Slow external User Service");
+
         LocalDateTime timeNow = LocalDateTime.now();
+        List<User> users = namesForSuperSlowService.stream().map(name -> new User(name, timeNow, "SuperSlowExternalUserService")).collect(Collectors.toList());
+        simulateSlowService();
 
-        List<User> users = names.stream().map(name -> new User(name, timeNow, "SuperSlowExternalUserService")).collect(Collectors.toList());
+        logger.info("Returning list of users");
+        return users;
+    }
+
+    private void simulateSlowService() {
         try {
             TimeUnit.SECONDS.sleep(SLEEP_IN_SECONDS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            // do nothing
         }
-
-        return users;
     }
 }

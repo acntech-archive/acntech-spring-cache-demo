@@ -3,26 +3,45 @@ package no.acntech.spring.cache.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import no.acntech.spring.cache.demo.domain.User;
-import no.acntech.spring.cache.demo.integration.SlowExternalUserService;
-import no.acntech.spring.cache.demo.integration.SuperSlowExternalUserService;
+
+import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private SlowExternalUserService slowExternalUserService;
+    private CacheManager cacheManager;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private SuperSlowExternalUserService superSlowExternalUserService;
+    public UserService(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
 
     public List<User> getUsers(List<String> namesForSlowService, List<String> namesForSuperSlowService) {
         List<User> users = new ArrayList<>();
-        users.addAll(slowExternalUserService.getUsers(namesForSlowService));
-        users.addAll(superSlowExternalUserService.getUsers(namesForSuperSlowService));
+
+        Cache usersCache = cacheManager.getCache(USERS_CACHE);
+        ArrayList cachedUsersFromSlowService = usersCache.get(namesForSlowService, ArrayList.class);
+        ArrayList cachedUsersFromSuperSlowService = usersCache.get(namesForSuperSlowService, ArrayList.class);
+
+        if (cachedUsersFromSlowService != null) {
+            users.addAll(cachedUsersFromSlowService);
+        }
+
+        if (cachedUsersFromSuperSlowService != null) {
+            users.addAll(cachedUsersFromSuperSlowService);
+        }
+
+        logger.info(String.format("Returning %d users from cache", users.size()));
         return users;
     }
+
 }
