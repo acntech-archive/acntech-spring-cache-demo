@@ -2,6 +2,7 @@ package no.acntech.spring.cache.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +25,17 @@ public class UserService {
     public List<User> getUsers(List<String> namesForSlowService, List<String> namesForSuperSlowService) {
         List<User> users = new ArrayList<>();
 
-        List<User> cachedUsersFromSlowService = usersCache.get(namesForSlowService, List.class);
-        List<User> cachedUsersFromSuperSlowService = usersCache.get(namesForSuperSlowService, List.class);
+        // Since SlowExternalUserService and SuperSlowExternalUserService is async and has return type CompletableFuture, objects cached are also having the same type
+        // However, there is no async involved in the cached values so we can safely retrieve result values and cast to List<User>
+        CompletableFuture cachedUsersFromSlowService = usersCache.get(namesForSlowService, CompletableFuture.class);
+        CompletableFuture cachedUsersFromSuperSlowService = usersCache.get(namesForSuperSlowService, CompletableFuture.class);
 
         if (cachedUsersFromSlowService != null) {
-            users.addAll(cachedUsersFromSlowService);
+            users.addAll((List<User>) cachedUsersFromSlowService.getNow(List.class));
         }
 
         if (cachedUsersFromSuperSlowService != null) {
-            users.addAll(cachedUsersFromSuperSlowService);
+            users.addAll((List<User>) cachedUsersFromSuperSlowService.getNow(List.class));
         }
 
         logger.info(String.format("Returning %d users from cache", users.size()));

@@ -2,12 +2,14 @@ package no.acntech.spring.cache.demo.integration;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import no.acntech.spring.cache.demo.domain.User;
@@ -20,8 +22,9 @@ public class SuperSlowExternalUserService {
     private static final Logger logger = LoggerFactory.getLogger(SuperSlowExternalUserService.class);
     private final long SLEEP_IN_SECONDS = 20;
 
+    @Async
     @CachePut(value = USERS_CACHE)
-    public List<User> getUsers(List<String> namesForSuperSlowService) {
+    public CompletableFuture<List<User>> getUsers(List<String> namesForSuperSlowService) {
         logger.info("Calling Super Slow external User Service");
 
         LocalDateTime timeNow = LocalDateTime.now();
@@ -29,7 +32,7 @@ public class SuperSlowExternalUserService {
         simulateSlowService();
 
         logger.info("Returning list of users");
-        return users;
+        return CompletableFuture.completedFuture(users);
     }
 
     private void simulateSlowService() {
