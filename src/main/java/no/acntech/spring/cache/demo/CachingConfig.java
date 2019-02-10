@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -17,6 +18,11 @@ public class CachingConfig {
 
     public static final String USERS_CACHE = "Users";
     private static final Logger logger = LoggerFactory.getLogger(CachingConfig.class);
+
+    @Bean
+    public Cache usersCache() {
+        return cacheManager().getCache(USERS_CACHE);
+    }
 
     @Bean
     public CacheManager cacheManager() {

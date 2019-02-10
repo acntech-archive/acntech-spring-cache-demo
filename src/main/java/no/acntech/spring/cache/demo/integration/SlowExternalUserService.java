@@ -17,8 +17,8 @@ import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
 @Service
 public class SlowExternalUserService {
 
-    private final long SLEEP_IN_SECONDS = 10;
     private static final Logger logger = LoggerFactory.getLogger(SlowExternalUserService.class);
+    private final long SLEEP_IN_SECONDS = 10;
 
     @CachePut(value = USERS_CACHE)
     public List<User> getUsers(List<String> namesForSlowService) {

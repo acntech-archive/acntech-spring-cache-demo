@@ -18,9 +18,9 @@ import no.acntech.spring.cache.demo.integration.SuperSlowExternalUserService;
 @EnableScheduling
 public class ScheduledCacheTask {
 
+    private static final Logger logger = LoggerFactory.getLogger(ScheduledCacheTask.class);
     private SlowExternalUserService slowExternalUserService;
     private SuperSlowExternalUserService superSlowExternalUserService;
-    private static final Logger logger = LoggerFactory.getLogger(ScheduledCacheTask.class);
 
     @Autowired
     public ScheduledCacheTask(SlowExternalUserService slowExternalUserService,
@@ -31,6 +31,10 @@ public class ScheduledCacheTask {
 
     @Scheduled(fixedDelayString = "${scheduling.cachetask.fixedDelay.inMillis}")
     public void scheduleRefreshCache() {
+        refreshCaches();
+    }
+
+    private void refreshCaches() {
         logger.info("Starting refreshing the cache");
 
         List<String> namesForSlowService = Arrays.asList("Tom", "Jon", "Peter");

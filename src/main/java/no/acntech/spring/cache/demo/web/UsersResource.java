@@ -21,8 +21,8 @@ import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersResource {
 
-    private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UsersResource.class);
+    private UserService userService;
 
     @Autowired
     public UsersResource(UserService userService) {
