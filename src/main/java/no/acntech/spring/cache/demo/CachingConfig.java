@@ -26,7 +26,7 @@ public class CachingConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        logger.info("Configuring Cache Manager");
+        logger.debug("Configuring Cache Manager");
 
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Collections.singletonList(new ConcurrentMapCache(USERS_CACHE)));
