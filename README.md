@@ -14,5 +14,5 @@ $ ./mvnw spring-boot:run
 
 ## REST APIs
 - GET http://localhost:8080/users - return users from `Users` cache
-- DELETE http://localhost:8080/cache/refresh/{externalServiceName} - triggers refresh of `Users` cache by calling external service `SUPERSLOW` or `SLOW`
+- GET http://localhost:8080/cache/refresh/{externalServiceName} - triggers refresh of `Users` cache by calling external service `SUPERSLOW` or `SLOW`
 
