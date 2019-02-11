@@ -45,9 +45,9 @@ public class ScheduledCacheTask {
 
         // Call async
         futures.add(slowExternalUserService.getUsers(namesForSlowService)
-                .thenAccept(users -> logger.info(String.format("Refreshed cache with %d from SlowService", users.size()))));
+                .thenAccept(users -> logger.debug(String.format("Refreshed cache with %d from SlowService", users.size()))));
         futures.add(superSlowExternalUserService.getUsers(namesForSuperSlowService)
-                .thenAccept(users -> logger.info(String.format("Refreshed cache with %d from SuperSlowService", users.size()))));
+                .thenAccept(users -> logger.debug(String.format("Refreshed cache with %d from SuperSlowService", users.size()))));
 
         try {
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).get();
