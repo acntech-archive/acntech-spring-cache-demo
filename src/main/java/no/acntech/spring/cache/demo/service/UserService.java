@@ -38,7 +38,7 @@ public class UserService {
             users.addAll((List<User>) cachedUsersFromSuperSlowService.getNow(List.class));
         }
 
-        logger.info(String.format("Returning %d users from cache", users.size()));
+        logger.debug(String.format("Returning %d users from cache", users.size()));
         return users;
     }
 

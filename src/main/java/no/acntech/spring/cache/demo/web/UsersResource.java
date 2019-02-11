@@ -31,13 +31,13 @@ public class UsersResource {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<User> getUsers() {
-        logger.info("Calling UserService");
+        logger.debug("Calling UserService");
 
         List<String> namesForSlowService = Arrays.asList("Tom", "Jon", "Peter");
         List<String> namesForSuperSlowService = Arrays.asList("Anna", "Isabelle", "Lizzi", "Madonna", "Gaga");
         List<User> users = userService.getUsers(namesForSlowService, namesForSuperSlowService);
 
-        logger.info("Returning response");
+        logger.debug("Returning response");
         return users;
     }
 

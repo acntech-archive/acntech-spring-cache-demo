@@ -25,13 +25,13 @@ public class SlowExternalUserService {
     @Async
     @CachePut(value = USERS_CACHE)
     public CompletableFuture<List<User>> getUsers(List<String> namesForSlowService) {
-        logger.info("Calling Slow external User Service");
+        logger.debug("Calling Slow external User Service");
 
         LocalDateTime timeNow = LocalDateTime.now();
         List<User> users = namesForSlowService.stream().map(name -> new User(name, timeNow, "SlowExternalUserService")).collect(Collectors.toList());
         simulateSlowService();
 
-        logger.info("Returning list of users");
+        logger.debug("Returning list of users");
 
         return CompletableFuture.completedFuture(users);
     }
