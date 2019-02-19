@@ -1,4 +1,4 @@
-package no.acntech.spring.cache.demo;
+package no.acntech.spring.cache.demo.service.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,24 +7,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import no.acntech.spring.cache.demo.service.CacheService;
+import no.acntech.spring.cache.demo.service.UserCacheProcessService;
 
 @Configuration
 @EnableScheduling()
-public class ScheduledCacheTask {
+public class UserCacheSchedulerConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScheduledCacheTask.class);
-    private final CacheService cacheService;
+    private static final Logger logger = LoggerFactory.getLogger(UserCacheSchedulerConfig.class);
+    private final UserCacheProcessService userCacheProcessService;
 
     @Autowired
-    public ScheduledCacheTask(CacheService cacheService) {
-        this.cacheService = cacheService;
+    public UserCacheSchedulerConfig(UserCacheProcessService userCacheProcessService) {
+        this.userCacheProcessService = userCacheProcessService;
     }
 
     @Scheduled(fixedDelayString = "${scheduling.cachetask.fixedDelay.inMillis}")
     public void launchJob() {
         logger.info("Starting scheduled cache refresh");
-        cacheService.refreshAllCacheStores();
+        userCacheProcessService.refreshAllCacheStores();
         logger.info("Finished scheduled cache refresh");
     }
 }

@@ -13,14 +13,14 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    private final CacheService cacheService;
+    private final UserCacheProcessService userCacheProcessService;
 
-    public UserService(CacheService cacheService) {
-        this.cacheService = cacheService;
+    public UserService(UserCacheProcessService userCacheProcessService) {
+        this.userCacheProcessService = userCacheProcessService;
     }
 
     public List<User> getUsers(List<String> namesForSlowService, List<String> namesForSuperSlowService) {
-        List<User> users = cacheService.getUsersFromCache(namesForSlowService, namesForSuperSlowService);
+        List<User> users = userCacheProcessService.getUsersFromCache(namesForSlowService, namesForSuperSlowService);
         logger.debug("Returning {} users from cache", users.size());
         return users;
     }

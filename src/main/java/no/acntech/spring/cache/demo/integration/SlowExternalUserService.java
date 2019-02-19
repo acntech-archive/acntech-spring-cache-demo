@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import no.acntech.spring.cache.demo.domain.User;
 
-import static no.acntech.spring.cache.demo.CachingConfig.USERS_CACHE;
+import static no.acntech.spring.cache.demo.service.config.UserCacheConfig.USERS_CACHE;
 
 @Service
 public class SlowExternalUserService {

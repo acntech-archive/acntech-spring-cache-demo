@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.acntech.spring.cache.demo.service.CacheService;
+import no.acntech.spring.cache.demo.service.UserCacheProcessService;
 import no.acntech.spring.cache.demo.service.ExternalServiceName;
 
 @RestController
@@ -17,17 +17,17 @@ import no.acntech.spring.cache.demo.service.ExternalServiceName;
 public class CacheResouce {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheResouce.class);
-    private CacheService cacheService;
+    private UserCacheProcessService userCacheProcessService;
 
     @Autowired
-    public CacheResouce(CacheService cacheService) {
-        this.cacheService = cacheService;
+    public CacheResouce(UserCacheProcessService userCacheProcessService) {
+        this.userCacheProcessService = userCacheProcessService;
     }
 
     @RequestMapping(value = "/refresh/{externalServiceName}", method = RequestMethod.GET)
     public void refreshCache(@PathVariable String externalServiceName) {
         logger.debug("Refreshing the cache for {}", externalServiceName);
-        cacheService.refreshCacheStore(ExternalServiceName.valueOf(externalServiceName));
+        userCacheProcessService.refreshCacheStore(ExternalServiceName.valueOf(externalServiceName));
     }
 
 }

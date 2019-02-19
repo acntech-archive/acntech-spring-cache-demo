@@ -1,4 +1,4 @@
-package no.acntech.spring.cache.demo;
+package no.acntech.spring.cache.demo.service.config;
 
 import java.util.Collections;
 
@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableCaching
-public class CachingConfig {
+public class UserCacheConfig {
 
     public static final String USERS_CACHE = "Users";
-    private static final Logger logger = LoggerFactory.getLogger(CachingConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserCacheConfig.class);
 
     @Bean
     public Cache usersCache() {

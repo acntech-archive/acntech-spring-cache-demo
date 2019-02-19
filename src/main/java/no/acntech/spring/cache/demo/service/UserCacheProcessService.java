@@ -18,19 +18,19 @@ import no.acntech.spring.cache.demo.integration.SlowExternalUserService;
 import no.acntech.spring.cache.demo.integration.SuperSlowExternalUserService;
 
 @Service
-public class CacheService {
+public class UserCacheProcessService {
 
     private SlowExternalUserService slowExternalUserService;
     private SuperSlowExternalUserService superSlowExternalUserService;
     private final Cache usersCache;
-    private static final Logger logger = LoggerFactory.getLogger(CacheService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserCacheProcessService.class);
     private final List<String> namesForSlowService = Arrays.asList("Tom", "Jon", "Peter");
     private final List<String> namesForSuperSlowService = Arrays.asList("Anna", "Isabelle", "Lizzi", "Madonna", "Gaga");
 
     @Autowired
-    public CacheService(SlowExternalUserService slowExternalUserService,
-                        SuperSlowExternalUserService superSlowExternalUserService,
-                        Cache usersCache) {
+    public UserCacheProcessService(SlowExternalUserService slowExternalUserService,
+                                   SuperSlowExternalUserService superSlowExternalUserService,
+                                   Cache usersCache) {
         this.slowExternalUserService = slowExternalUserService;
         this.superSlowExternalUserService = superSlowExternalUserService;
         this.usersCache = usersCache;
