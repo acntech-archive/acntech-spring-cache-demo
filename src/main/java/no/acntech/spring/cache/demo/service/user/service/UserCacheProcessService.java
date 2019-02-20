@@ -1,6 +1,5 @@
 package no.acntech.spring.cache.demo.service.user.service;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -17,6 +16,7 @@ import no.acntech.spring.cache.demo.domain.User;
 import no.acntech.spring.cache.demo.integration.SlowExternalUserService;
 import no.acntech.spring.cache.demo.integration.SuperSlowExternalUserService;
 import no.acntech.spring.cache.demo.service.app.service.AppService;
+import no.acntech.spring.cache.demo.service.user.config.AppUsersInEnvKeyGenerator;
 
 @Service
 public class UserCacheProcessService {
@@ -30,7 +30,8 @@ public class UserCacheProcessService {
     @Autowired
     public UserCacheProcessService(SlowExternalUserService slowExternalUserService,
                                    SuperSlowExternalUserService superSlowExternalUserService,
-                                   AppService appService, Cache usersCache) {
+                                   AppService appService,
+                                   Cache usersCache) {
         this.slowExternalUserService = slowExternalUserService;
         this.superSlowExternalUserService = superSlowExternalUserService;
         this.appService = appService;
@@ -106,8 +107,8 @@ public class UserCacheProcessService {
     List<User> getUsersFromCache(App app, String env) {
         List<User> users = new ArrayList<>();
 
-        String slowCacheKey = MessageFormat.format("slow-{0}-{1}-{2}", app.getSystem(), app.getName(), env);
-        String superSlowCacheKey = MessageFormat.format("superslow-{0}-{1}-{2}", app.getSystem(), app.getName(), env);
+        String slowCacheKey = AppUsersInEnvKeyGenerator.getKey(SlowExternalUserService.class.getSimpleName(), app, env);
+        String superSlowCacheKey = AppUsersInEnvKeyGenerator.getKey(SuperSlowExternalUserService.class.getSimpleName(), app, env);
 
         List<User> cachedUsersFromSlowService = usersCache.get(slowCacheKey, List.class);
         List<User> cachedUsersFromSuperSlowService = usersCache.get(superSlowCacheKey, List.class);

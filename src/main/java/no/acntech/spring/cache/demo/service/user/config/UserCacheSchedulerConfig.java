@@ -24,25 +24,25 @@ public class UserCacheSchedulerConfig {
     @Scheduled(fixedDelayString = "${scheduling.cachejob.test.slow.fixedDelay.inMillis}")
     public void refreshUsersForAllAppsInTestFromSlowServiceJob() {
         logger.info("Starting scheduled cache refresh in TEST from Slow Service");
-        userCacheProcessService.refreshUsersForAllAppsInTestFromSlowService().thenAccept(users -> logger.debug("Finished scheduled cache refresh in TEST from Slow Service"));
+        userCacheProcessService.refreshUsersForAllAppsInTestFromSlowService().thenAccept(users -> logger.info("Finished scheduled cache refresh in TEST from Slow Service"));
     }
 
     @Scheduled(fixedDelayString = "${scheduling.cachejob.test.superslow.fixedDelay.inMillis}")
     public void refreshUsersForAllAppsInTestFromSuperSlowServiceJob() {
         logger.info("Starting scheduled cache refresh in TEST from Super Slow Service");
-        userCacheProcessService.refreshUsersForAllAppsInTestFromSuperSlowService().thenAccept(users -> logger.debug("Finished scheduled cache refresh in TEST from Super Slow Service"));
+        userCacheProcessService.refreshUsersForAllAppsInTestFromSuperSlowService().thenAccept(users -> logger.info("Finished scheduled cache refresh in TEST from Super Slow Service"));
     }
 
     @Scheduled(fixedDelayString = "${scheduling.cachejob.prod.slow.fixedDelay.inMillis}")
     public void refreshUsersForAllAppsInProdFromSlowServiceJob() {
         logger.info("Starting scheduled cache refresh in PROD from Slow Service");
-        userCacheProcessService.refreshUsersForAllAppsInProdFromSlowService().thenAccept(users -> logger.debug("Finished scheduled cache refresh in PROD from Slow Service"));
+        userCacheProcessService.refreshUsersForAllAppsInProdFromSlowService().thenAccept(users -> logger.info("Finished scheduled cache refresh in PROD from Slow Service"));
     }
 
     @Scheduled(fixedDelayString = "${scheduling.cachejob.prod.superslow.fixedDelay.inMillis}")
     public void refreshUsersForAllAppsInProdFromSuperSlowServiceJob() {
         logger.info("Starting scheduled cache refresh in PROD from Super Slow Service");
-        userCacheProcessService.refreshUsersForAllAppsInProdFromSuperSlowService().thenAccept(users -> logger.debug("Finished scheduled cache refresh in PROD from Super Slow Service"));
+        userCacheProcessService.refreshUsersForAllAppsInProdFromSuperSlowService().thenAccept(users -> logger.info("Finished scheduled cache refresh in PROD from Super Slow Service"));
     }
 
 }

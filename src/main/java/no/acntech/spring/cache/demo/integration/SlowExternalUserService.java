@@ -22,7 +22,7 @@ import static no.acntech.spring.cache.demo.service.user.config.UserCacheConfig.U
 public class SlowExternalUserService {
 
     private static final Logger logger = LoggerFactory.getLogger(SlowExternalUserService.class);
-    private final long SLEEP_IN_SECONDS = 10;
+    private final long SLEEP_IN_SECONDS = 5;
     private HashMap<String, List<AppUsers>> envAppUsers;
     private AppService appService;
 
@@ -31,7 +31,7 @@ public class SlowExternalUserService {
         this.appService = appService;
     }
 
-    @CachePut(value = USERS_CACHE, key = "'slow-'.concat(#app.system).concat('-').concat(#app.name).concat('-').concat(#env)")
+    @CachePut(value = USERS_CACHE, keyGenerator = "appUsersInEnvKeyGenerator")
     public List<User> getUsers(App app, String env) {
         logger.debug("Calling Slow external User Service");
 
@@ -81,7 +81,7 @@ public class SlowExternalUserService {
         testAppUsers.add(new AppUsers(apps.get(3), users21));
 
         List<AppUsers> prodAppUsers = new ArrayList<>();
-        testAppUsers.add(new AppUsers(apps.get(3), users21));
+        prodAppUsers.add(new AppUsers(apps.get(3), users21));
 
         envAppUsers.put("TEST", testAppUsers);
         envAppUsers.put("PROD", prodAppUsers);

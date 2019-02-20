@@ -27,7 +27,7 @@ public class CacheResouce {
         this.appService = appService;
     }
 
-    @RequestMapping(value = "/{systemName}/{appName}/{env}", method = RequestMethod.GET)
+    @RequestMapping(value = "/refresh/{systemName}/{appName}/{env}", method = RequestMethod.GET)
     public void refreshCache(@PathVariable("systemName") String systemName,
                              @PathVariable("appName") String appName,
                              @PathVariable("env") String env) {

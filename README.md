@@ -13,6 +13,12 @@ $ ./mvnw spring-boot:run
 ````
 
 ## REST APIs
-- GET http://localhost:8080/users - return users from `Users` cache
-- GET http://localhost:8080/cache/refresh/{externalServiceName} - triggers refresh of `Users` cache by calling external service `SUPERSLOW` or `SLOW`
+- GET http://localhost:8080/users/{systemName}/{appName}/{env} - return users from `Users` cache
+  - systemName=`system1, system2`
+  - appName=`app11, app12, app13, app21`
+  - env=`PROD, TEST`
+- GET http://localhost:8080/cache/refresh/{systemName}/{appName}/{env} - triggers refresh of `Users` cache
+  - systemName=`system1, system2`
+  - appName=`app11, app12, app13, app21`
+  - env=`PROD, TEST`
 
