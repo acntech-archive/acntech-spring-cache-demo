@@ -1,4 +1,4 @@
-package no.acntech.spring.cache.demo.service.config;
+package no.acntech.spring.cache.demo.service.user.config;
 
 import java.util.Collections;
 
